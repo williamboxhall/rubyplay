@@ -8,7 +8,7 @@
 #---
 require "./tennis_scorer"
 
-describe TennisScorer, "basic scoring" do
+describe TennisScorer, "score" do
   before(:each) do
     @ts = TennisScorer.new
   end

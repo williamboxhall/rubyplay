@@ -14,36 +14,45 @@ class TennisScorer
   }
 
   def initialize
-    @score = { :server => 0, :receiver => 0 }
+    @points = { :server => 0, :receiver => 0 }
   end
 
   def score
-    case
-    when @score[:server] > 2 && @score[:server] == @score[:receiver]
-      "Deuce"
-    when @score[:server] > 2 && @score[:server] - @score[:receiver] == 1
-      "A-server"
-    when @score[:server] > 2 && @score[:server] - @score[:receiver] == -1
-      "A-receiver"
-    when @score[:server] > 3
-      "W-L"
-    when @score[:receiver] > 3
-      "L-W"
+    s = @points[:server]
+    r = @points[:receiver]
+
+    if s <= 3 && r <= 3 && s + r < 6
+	numeric_score_for s, r
     else
-      "#{numeric_score_for :server}-#{numeric_score_for :receiver}"
+      case
+      when s == r
+        "Deuce"
+      when s - r == 1
+        "A-server"
+      when r - s == 1
+        "A-receiver"
+      when s - r > 1
+        "W-L"
+      when r - s > 1
+        "L-W"
+      end
     end
   end
 
   def give_point_to(player)
     other = OPPOSITE_SIDE_OF_NET[player]
     fail "Unknown player #{player}" unless other
-    @score[player] += 1
+    @points[player] += 1
   end
 
-  private 
-  def numeric_score_for(player)
-    foo = @score[player] * 15
-    foo -= 5 if @score[player] == 3
+  private
+  def numeric_score_for(s, r)
+    return "#{numeric_for s}-#{numeric_for r}"
+  end
+
+  def numeric_for(points)
+    foo = points * 15
+    foo -= 5 if points == 3
     foo
   end
 end
