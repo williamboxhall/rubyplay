@@ -1,4 +1,0 @@
-rubyplay
-========
-
-Teaching myself ruby
